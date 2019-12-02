@@ -2,59 +2,30 @@ import pygame
 import Sprites
 import Constants
 from Constants import *
+import states
 
 
 #Initalise pygame and window
 pygame.init()
 screen = pygame.display.set_mode(SIZE)
 clock = pygame.time.Clock()
+current_state = states.Game()
 
-#initalise sprites
-sprites = pygame.sprite.Group()
-left_paddle = Sprites.Paddle(LEFT_PADDLE_X, STARTING_PADDLE_Y)
-sprites.add(left_paddle)
-right_paddle = Sprites.Paddle(RIGHT_PADDLE_X, STARTING_PADDLE_Y)
-sprites.add(right_paddle)
-paddles = [left_paddle, right_paddle]
-ball = Sprites.Ball(STARTING_BALL_X, STARTING_BALL_Y, paddles)
-sprites.add(ball)
 
 #Game loop
-running = True
-while running:
+while current_state.running:
     #handle input
+    if current_state.next_state:
+        current_state = current_state.next_state
     events = pygame.event.get()
-    for event in events:
-        if event.type == pygame.QUIT:
-            running = False
-        elif event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_a:
-                left_paddle.up()
-            elif event.key == pygame.K_z:
-                left_paddle.down()
-            elif event.key == pygame.K_UP:
-                right_paddle.up()
-            elif event.key == pygame.K_DOWN:
-                right_paddle.down()
-        elif event.type == pygame.KEYUP:
-            if event.key == pygame.K_a:
-                left_paddle.stopup()
-            elif event.key == pygame.K_z:
-                left_paddle.stopdown()
-            elif event.key == pygame.K_UP:
-                right_paddle.stopup()
-            elif event.key == pygame.K_DOWN:
-                right_paddle.stopdown()
+    current_state.handle_events(events)
     #game logic
-    sprites.update()
-
+    current_state.update()
     #drawing
-    screen.fill(RED)
-    sprites.draw(screen)
-
+    current_state.draw(screen)
     pygame.display.flip()
-
     clock.tick(FPS)
+
 
 #Quit
 pygame.quit()
