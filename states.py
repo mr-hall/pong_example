@@ -17,7 +17,7 @@ class Game():
         self.running = True
         self.next_state = None
 
-    def handle_events(self, events):
+    def handle_events(self, events):#
         for event in events:
             if event.type == pygame.QUIT:
                 self.running = False
