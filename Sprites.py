@@ -3,49 +3,49 @@ import random
 import pygame
 
 
-class Sprite():
-    def __init__(self, x, y, width, height, colour):
-        super().__init__()
-        self.x = x
-        self.y = y
-        self.width = width
-        self.height = height
-        self.colour = colour
 
-    def update(self):
-        pass
-
-    def draw(self, screen):
-        pygame.draw.rect(screen, self.colour, [self.x, self.y, self.width, self.height])
-
-class Ball(Sprite):
+class Ball(pygame.sprite.Sprite):
     def __init__(self, x, y, paddles):
-        super().__init__(x,y, BALL_WIDTH, BALL_WIDTH, WHITE)
+        super().__init__()
+
         self.vx = random.randint(MIN_BALL_SPEED,MAX_BALL_SPEED)
         self.vy = random.randint(MIN_BALL_SPEED,MAX_BALL_SPEED)
         self.paddles = paddles
+        self.image = pygame.Surface([BALL_WIDTH, BALL_WIDTH])
+        self.image.fill(WHITE)
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
 
 
     def hit_paddle(self):
         for paddle in self.paddles:
-            return False
+            if paddle.rect.colliderect(self.rect):
+                return True
+        return False
+
 
     def update(self):
-        self.x = self.x + self.vx
-        if self.x < 0 or self.x + self.width > WIDTH or hit_paddle:
-            self.x = self.x - self.vx
+        self.rect.x = self.rect.x + self.vx
+        if self.rect.x < 0 or self.rect.x + self.rect.width > WIDTH or self.hit_paddle():
+            self.rect.x = self.rect.x - self.vx
             self.vx = - self.vx
-        self.y = self.y + self.vy
-        if self.y < 0 or self.y + self.width > HEIGHT or hit_paddle:
-            self.y = self.y - self.vy
+        self.rect.y = self.rect.y + self.vy
+        if self.rect.y < 0 or self.rect.y + self.rect.width > HEIGHT or self.hit_paddle():
+            self.rect.y = self.rect.y - self.vy
             self.vy = - self.vy
 
 
-class Paddle(Sprite):
+class Paddle(pygame.sprite.Sprite):
     def __init__(self, x, y):
-        super().__init__(x,y, BALL_WIDTH, BALL_WIDTH * 5, WHITE)
+        super().__init__()
         self.speed = 0
         self.direction = []
+        self.image = pygame.Surface([BALL_WIDTH, BALL_WIDTH * 5])
+        self.image.fill(WHITE)
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
 
     def up(self):
         self.direction.append(UP)
@@ -67,6 +67,6 @@ class Paddle(Sprite):
                 self.speed = +PADDLE_SPEED
         except IndexError:
             self.speed = 0
-        self.y = self.y + self.speed
+        self.rect.y = self.rect.y + self.speed
 
 

@@ -10,15 +10,15 @@ screen = pygame.display.set_mode(SIZE)
 clock = pygame.time.Clock()
 
 #initalise sprites
-sprites = []
-
+sprites = pygame.sprite.Group()
 left_paddle = Sprites.Paddle(LEFT_PADDLE_X, STARTING_PADDLE_Y)
-sprites.append(left_paddle)
+sprites.add(left_paddle)
 right_paddle = Sprites.Paddle(RIGHT_PADDLE_X, STARTING_PADDLE_Y)
-sprites.append(right_paddle)
+sprites.add(right_paddle)
 paddles = [left_paddle, right_paddle]
 ball = Sprites.Ball(STARTING_BALL_X, STARTING_BALL_Y, paddles)
-sprites.append(ball)
+sprites.add(ball)
+
 #Game loop
 running = True
 while running:
@@ -46,13 +46,11 @@ while running:
             elif event.key == pygame.K_DOWN:
                 right_paddle.stopdown()
     #game logic
-    for sprite in sprites:
-        sprite.update()
+    sprites.update()
 
     #drawing
     screen.fill(RED)
-    for sprite in sprites:
-        sprite.draw(screen)
+    sprites.draw(screen)
 
     pygame.display.flip()
 
