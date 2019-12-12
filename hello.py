@@ -4,7 +4,7 @@ import Constants
 from Constants import *
 import states
 
-print("hello")
+
 #Initalise pygame and window
 pygame.init()
 screen = pygame.display.set_mode(SIZE)
