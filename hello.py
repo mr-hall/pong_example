@@ -13,7 +13,7 @@ screen = pygame.display.set_mode(SIZE)
 clock = pygame.time.Clock()
 #current_state = states.Game()
 current_state = states.TitleScreen()
-
+print("hello")
 #Game loop
 while current_state.running:
     #handle input
